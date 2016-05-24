@@ -25,10 +25,10 @@ router.get('/:id', (req, res) => {
 
 router.post('/', User.isLoggedIn, (req, res) => {
     Auction.create(req.body, (err1, auction) => {
-        if(err1) res.status(400).send(err1)
-        else{
-            User.addAuction(req.user, auction, (err2, addedAuction)=> {
-                if(err2) res.status(400).send(err2);
+        if (err1) res.status(400).send(err1)
+        else {
+            User.addAuction(req.user, auction, (err2, addedAuction) => {
+                if (err2) res.status(400).send(err2);
             });
         };
         res.send(auction);
@@ -56,8 +56,8 @@ router.delete('/:id', User.isLoggedIn, (req, res) => {
 });
 
 router.put('/:auctionId/addBid/:userId', User.isLoggedIn, (req, res) => {
-    Auction.highBid(req.params.auctionId, req.params.userId, req.body, (err, hightestBid)=> {
-        if(err) res.status(400).send(err);
+    Auction.highBid(req.params.auctionId, req.params.userId, req.body, (err, hightestBid) => {
+        if (err) res.status(400).send(err);
 
         res.send(hightestBid);
     });

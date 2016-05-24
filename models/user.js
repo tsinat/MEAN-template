@@ -11,9 +11,32 @@ var userSchema = new mongoose.Schema({
   firstName: {type: String, required: true},
   lastName: {type: String, required: true},
   email: { type: String, required: true, unique: true },
+  admin: {type: Boolean, default: false},
   password: { type: String, required: true },
   auctions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Auction'}]
 });
+
+userSchema.statics.auth = roleRequired => {
+  return (req, res, next) => {
+    var token = req.cookies.accessToken;
+
+    jwt.verify(token, JWT_SECRET, (err, payload) => {
+      if(err) return res.status(401).send({error: 'Authentication required.'});
+
+      User.findById(payload._id, (err, user) => {
+        if(err || !user) return res.status(401).send({error: 'User not found.'});
+        req.user = user;
+
+        if(roleRequired === 'admin' && !req.user.admin) {
+          // they don't have admin privilages
+          return res.status(403).send({error: 'Not authorized.'});
+        }
+
+        next(); // they have the required privilages
+      }).select('-password');
+    });
+  };
+};
 
 userSchema.statics.isLoggedIn = (req, res, next) => {
     var token = req.cookies.accessToken;
@@ -32,7 +55,7 @@ userSchema.statics.isLoggedIn = (req, res, next) => {
 };
 
 userSchema.statics.register = (userObj, cb) => {
-    console.log('userObj:', userObj);
+  console.log('userObj:', userObj);
   User.findOne({email: userObj.email}, (err, dbUser) => {
     if(err || dbUser) return cb(err || {error: 'Email not available.'});
 
@@ -47,7 +70,7 @@ userSchema.statics.register = (userObj, cb) => {
       });
 
       user.save((err, savedUser) => {
-        //savedUser.password = null;
+        savedUser.password = null;
         cb(err, savedUser);
       });
     });
