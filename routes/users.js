@@ -18,12 +18,16 @@ router.post('/authenticate', (req, res) => {
         if (err) {
             res.status(400).send(err);
         } else {
-            res.cookie('accessToken', token).send(dbUser);
+            res.cookie('accessToken', token).send();
         }
     });
 });
+router.get('/profile', User.isLoggedIn, (req, res) => {
+    console.log('routing2', req.user);
+    res.send(req.user);
+});
 
-router.put('/:id', User.isLoggedIn, (req, res) => {
+router.put('/:id', User.auth(), (req, res) => {
     User.edit(req.params.id, req.body, (err, editedUser) => {
         if (err) {
             res.status(400).send(err);
@@ -39,19 +43,27 @@ router.post('/logout', (req, res) => {
 });
 
 router.get('/', User.auth(), (req, res) => {
+    console.log('req.queries:', req.queries);
     User.find({}, (err, users) => {
         res.status(err ? 400 : 200).send(err || users);
     }).select('-password');
 });
 
-router.get('/:id', User.isLoggedIn, (req, res) => {
+router.get('/:id', User.auth(), (req, res) => {
     User.find(req.params.id, (err, user) => {
-        if (err) return res.status()
+        if (err) return res.status(400).send(err)
 
         res.send(user)
     }).select('-password');
 });
 
+router.delete('/:id', User.auth(), (req, res) => {
+    User.findByIdAndRemove(req.params.id, (err, user) => {
+        if(err) return res.status(400).send(err);
+
+        res.send();
+    })
+})
 
 
 module.exports = router;

@@ -1,9 +1,43 @@
-body{
-    padding: 50px;
+.btn-group-lg > .btn,
+.btn-lg {
+    border-radius: 0;
+    background-color: inherit;
+    color: silver;
 }
-a {
-    color: #435345;
+.navbar {
+    border-radius: 0;
 }
-h1 {
-    color:grey;
+.btn-home {
+    padding: 10px 80px;
+    border-radius: 5px;
+}
+.glyphicon-folder-open {
+    font-size: 4em;
+}
+.album-container {
+    width: 33%;
+    float: left;
+    /*color: skyblue;*/
+}
+.btn-add {
+    margin-top: 40px;
+}
+.img-detail {
+    width: 200px;
+    height: 200px;
+}
+.img-large {
+    width: 400px;
+    height: 500px;
+}
+.signup {
+    background-color: #252525;
+    border-radius: 5px;
+    padding: 10px 80px;
+}
+.currentUser {
+    float: right;
+    color: white;
+    margin-right: 30px;
+    margin-top: 10px;
 }

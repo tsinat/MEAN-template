@@ -13,7 +13,22 @@
 </head>
 
 <body ng-app='myApp' ng-controller='mainCtrl'>
+    <nav class="navbar navbar-inverse">
+        <button class="btn btn-lg " ui-sref='home'>Home</button>
+        <button class="btn btn-lg " ui-sref='profile'>Profile</button>
+        <!-- <button class="btn btn-lg" ui-sref='albums'>Albums</button> -->
+        <!-- <button class="btn btn-lg  " ui-sref='images'>Images</button> -->
+        <span ng-hide='currentUser'>
+            <button class="btn btn-lg" ui-sref='register'>Register</button>
+            <button class="btn btn-lg" ui-sref='login'>Login</button>
+        </span>
+        <span ng-show='currentUser'>
+            <button class="btn btn-lg" ng-click='logout()'>Logout</button>
+            <span class='currentUser'>Hello {{currentUser.email}}!</span>
+        </span>
+        </div>
 
+    </nav>
 
     <ui-view></ui-view>
 </body>

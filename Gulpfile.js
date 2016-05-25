@@ -15,9 +15,9 @@ var sass = require('gulp-sass');
 
 gulp.task('default', ['build', 'watch', 'serve']);
 
-gulp.task('build', ['js', 'css']);
+gulp.task('build', ['js', 'css', 'html']);
 
-gulp.task('watch', ['watch.js', 'watch.css', 'watch.lint']);
+gulp.task('watch', ['watch.js', 'watch.css', 'watch.html']);
 
 gulp.task('serve', function() {
     nodemon({
@@ -63,7 +63,15 @@ gulp.task('js', function() {
         .pipe(gulp.dest('./public/js'));
 
 });
+//////// html /////////////
+gulp.task('watch.html', function() {
+    return gulp.watch('./client/html/*.html')
+});
 
+gulp.task('html', function() {
+        return gulp.src('./client/html/*.html')
+        .pipe(gulp.dest('./public/html'));
+})
 ///////  CSS ///////////
 
 
